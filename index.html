@@ -58,10 +58,10 @@
     </div>
     <hr class="sidebar-divider">
     <div class="sidebar-dropdown">
-      <a class="sidebar-nav-item active" id="dropdown-your-resources">▼ Your resources</a>
+      <a class="sidebar-nav-item sidebar-dropdown-toggle" id="dropdown-your-resources">▼ Your resources</a>
       <div class="sidebar-dropdown-menu open" id="menu-your-resources">
-        <a class="sidebar-sub-item active" href="#">Support Dashboard</a>
-        <a class="sidebar-sub-item" href="#">Support Cases</a>
+        <a class="sidebar-sub-item active" href="#" id="nav-dashboard">Support Dashboard</a>
+        <a class="sidebar-sub-item" href="#" id="nav-cases">Support Cases</a>
       </div>
     </div>
     <a class="sidebar-nav-item">▶ AWS Support Plans</a>
@@ -74,8 +74,18 @@
   <main class="main-content">
     <div class="content-wrapper">
 
+      <!-- Dashboard View -->
+      <div class="view active" id="view-dashboard">
+
       <!-- Architecture Container -->
-      <div class="arch-container">
+      <div class="arch-container" id="arch-container">
+        <!-- Title Bar -->
+        <div class="arch-title-bar">
+          <span class="arch-title">My Architecture</span>
+          <button class="arch-collapse-btn" id="arch-collapse-btn">▼</button>
+        </div>
+        <!-- Collapsible content -->
+        <div class="arch-collapsible" id="arch-collapsible">
         <!-- Toolbar: Region filter -->
         <div class="arch-toolbar">
           <label>Region:</label>
@@ -104,6 +114,51 @@
         </div>
 
         <!-- Canvas -->
+        <div class="arch-body">
+
+        <!-- Side Panel (collapsible, left) -->
+        <div class="arch-side-panel" id="arch-side-panel">
+          <button class="arch-side-toggle" id="arch-side-toggle">◀</button>
+          <div class="arch-side-content">
+
+            <!-- Archived Chats -->
+            <div class="side-section">
+              <div class="side-section-header" data-section="archived">▼ Archived Chats</div>
+              <div class="side-section-body open" id="section-archived">
+              </div>
+            </div>
+
+            <!-- Tools -->
+            <div class="side-section">
+              <div class="side-section-header" data-section="tools">▼ Tools</div>
+              <div class="side-section-body open" id="section-tools">
+                <div class="side-item">🔍 Reachability Analyzer</div>
+                <div class="side-item">🛡️ SG Checker</div>
+                <div class="side-item">📊 Flow Log Analyzer</div>
+                <div class="side-item">🗺️ Route Table Inspector</div>
+                <div class="side-item">📈 CloudWatch Metrics</div>
+                <div class="side-item">🔌 Connectivity Tester</div>
+              </div>
+            </div>
+
+            <!-- Cost Analysis -->
+            <div class="side-section">
+              <div class="side-section-header" data-section="cost">▶ Cost Analysis</div>
+              <div class="side-section-body" id="section-cost">
+                <div class="side-item cost-item"><span>EKS Cluster</span><span>$142/mo</span></div>
+                <div class="side-item cost-item"><span>RDS Aurora</span><span>$89/mo</span></div>
+                <div class="side-item cost-item"><span>ElastiCache</span><span>$52/mo</span></div>
+                <div class="side-item cost-item"><span>Lambda</span><span>$8/mo</span></div>
+                <div class="side-item cost-item"><span>NAT Gateway</span><span>$65/mo</span></div>
+                <div class="side-item cost-item"><span>S3 + DynamoDB</span><span>$23/mo</span></div>
+                <div class="side-item cost-total"><span>Total</span><span>$379/mo</span></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="arch-main">
         <div class="arch-canvas" id="arch-canvas">
           <svg id="arch-svg" viewBox="0 0 1800 1400" xmlns="http://www.w3.org/2000/svg"></svg>
 
@@ -139,7 +194,107 @@
           <!-- Tooltip -->
           <div class="arch-tooltip" id="arch-tooltip"></div>
         </div>
+
+        <!-- Chat Panel (inside topology) -->
+        <div class="chat-panel">
+          <div class="chat-header">
+            <div class="chat-thread-info">
+              <span class="chat-thread-dot"></span>
+              <span class="chat-thread-title">Active Thread</span>
+            </div>
+            <div class="chat-actions">
+              <button class="chat-action-btn">📁 Archive</button>
+              <button class="chat-action-btn chat-action-new">+ New Thread</button>
+            </div>
+          </div>
+          <div class="chat-messages" id="chat-messages">
+            <div class="chat-empty">No messages yet. Describe an issue or ask about your architecture.</div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Ask about your architecture...">
+            <button class="chat-send-btn" id="chat-send">→</button>
+          </div>
+        </div>
+        </div><!-- end arch-main -->
+
+        </div><!-- end arch-body -->
+        </div><!-- end arch-collapsible -->
+      </div><!-- end arch-container -->
+
+      <!-- Active Cases -->
+      <div class="cases-container" id="cases-container">
+        <div class="cases-title-bar">
+          <span class="cases-title">Active Cases</span>
+          <button class="cases-collapse-btn" id="cases-collapse-btn">▼</button>
+        </div>
+        <div class="cases-collapsible" id="cases-collapsible">
+          <div class="cases-toolbar">
+            <input type="text" class="cases-search" placeholder="Search cases...">
+            <div class="cases-filters">
+              <button class="cases-chip active">All</button>
+              <button class="cases-chip">Critical</button>
+              <button class="cases-chip">Warning</button>
+              <button class="cases-chip">Pending</button>
+            </div>
+          </div>
+          <div class="cases-grid" id="cases-grid">
+            <div class="case-card case-critical" data-case-id="eks-rds" onclick="openWorkspace('eks-rds')">
+              <div class="case-status"><span class="case-pulse"></span><span>Agent Investigating</span></div>
+              <h3>EKS → RDS Connection Failure</h3>
+              <p class="case-desc">Cluster: prod-cluster · Security group misconfiguration detected</p>
+              <div class="case-meta">
+                <span class="case-tag tag-critical">Critical</span>
+                <span class="case-tag tag-proactive">Proactively Detected</span>
+                <span class="case-time">2 min ago</span>
+              </div>
+              <div class="case-footer">
+                <div class="case-avatar">A</div>
+                <span class="case-action">Open workspace →</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      </div><!-- end view-dashboard -->
+
+      <!-- Support Cases View -->
+      <div class="view" id="view-cases">
+        <div class="cases-page">
+          <div class="cases-page-header">
+            <h2>Support Cases</h2>
+            <p>View all your support cases — active, pending, and resolved.</p>
+          </div>
+          <div class="cases-page-toolbar">
+            <input type="text" class="cases-search" placeholder="Search all cases...">
+            <div class="cases-filters">
+              <button class="cases-chip active">All</button>
+              <button class="cases-chip">Active</button>
+              <button class="cases-chip">Pending</button>
+              <button class="cases-chip">Resolved</button>
+            </div>
+          </div>
+          <div class="cases-page-grid" id="cases-page-grid">
+            <div class="case-card case-critical" data-case-id="eks-rds" onclick="openWorkspace('eks-rds')">
+              <div class="case-status"><span class="case-pulse"></span><span>Agent Investigating</span></div>
+              <h3>EKS → RDS Connection Failure</h3>
+              <p class="case-desc">Cluster: prod-cluster · Security group misconfiguration detected</p>
+              <div class="case-meta">
+                <span class="case-tag tag-critical">Critical</span>
+                <span class="case-tag tag-proactive">Proactively Detected</span>
+                <span class="case-time">2 min ago</span>
+              </div>
+              <div class="case-footer">
+                <div class="case-avatar">A</div>
+                <span class="case-action">Open workspace →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- end view-cases -->
+
+      <!-- Workspace View (rendered dynamically by WorkspaceController) -->
+      <div class="view" id="view-workspace"></div>
 
     </div>
   </main>

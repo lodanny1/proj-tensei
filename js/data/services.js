@@ -1,23 +1,23 @@
 // === Services Database ===
 // To add a service: add to NODES. To add a connection: add to EDGES.
 
-const ICON_BASE = 'Icon-package_04302026.4705b90f5aa45b019271a2699e9ce9b97b941ee1/Architecture-Service-Icons_04302026';
+const ICON_BASE = 'assets/icons';
 
 export const ICON_MAP = {
-  'route53': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_Amazon-Route-53_64.svg`,
-  'cloudfront': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_Amazon-CloudFront_64.svg`,
-  'igw': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_Amazon-Virtual-Private-Cloud_64.svg`,
-  'nat': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_Amazon-Virtual-Private-Cloud_64.svg`,
-  'tgw': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_AWS-Transit-Gateway_64.svg`,
-  'alb': `${ICON_BASE}/Arch_Networking-Content-Delivery/64/Arch_Elastic-Load-Balancing_64.svg`,
-  'ec2': `${ICON_BASE}/Arch_Compute/64/Arch_Amazon-EC2_64.svg`,
-  'eks': `${ICON_BASE}/Arch_Containers/64/Arch_Amazon-Elastic-Kubernetes-Service_64.svg`,
-  'lambda': `${ICON_BASE}/Arch_Compute/64/Arch_AWS-Lambda_64.svg`,
-  'rds': `${ICON_BASE}/Arch_Databases/64/Arch_Amazon-Aurora_64.svg`,
-  'elasticache': `${ICON_BASE}/Arch_Databases/64/Arch_Amazon-ElastiCache_64.svg`,
-  'dynamodb': `${ICON_BASE}/Arch_Databases/64/Arch_Amazon-DynamoDB_64.svg`,
-  'sqs': `${ICON_BASE}/Arch_Application-Integration/64/Arch_Amazon-Simple-Queue-Service_64.svg`,
-  's3': `${ICON_BASE}/Arch_Storage/64/Arch_Amazon-Simple-Storage-Service_64.svg`,
+  'route53': `${ICON_BASE}/amazon-route-53.svg`,
+  'cloudfront': `${ICON_BASE}/amazon-cloudfront.svg`,
+  'igw': `${ICON_BASE}/amazon-virtual-private-cloud.svg`,
+  'nat': `${ICON_BASE}/amazon-virtual-private-cloud.svg`,
+  'tgw': `${ICON_BASE}/aws-transit-gateway.svg`,
+  'alb': `${ICON_BASE}/elastic-load-balancing.svg`,
+  'ec2': `${ICON_BASE}/amazon-ec2.svg`,
+  'eks': `${ICON_BASE}/amazon-elastic-kubernetes-service.svg`,
+  'lambda': `${ICON_BASE}/aws-lambda.svg`,
+  'rds': `${ICON_BASE}/amazon-aurora.svg`,
+  'elasticache': `${ICON_BASE}/amazon-elasticache.svg`,
+  'dynamodb': `${ICON_BASE}/amazon-dynamodb.svg`,
+  'sqs': `${ICON_BASE}/amazon-simple-queue-service.svg`,
+  's3': `${ICON_BASE}/amazon-simple-storage-service.svg`,
 };
 
 export const NODES = [

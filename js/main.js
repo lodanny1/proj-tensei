@@ -17,6 +17,18 @@ const toggleBtn = document.getElementById('toggleSidebar');
 collapseBtn.addEventListener('click', () => sidebar.classList.add('collapsed'));
 toggleBtn.addEventListener('click', () => sidebar.classList.toggle('collapsed'));
 
+// Sidebar dropdowns
+document.querySelectorAll('.sidebar-dropdown > .sidebar-nav-item').forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const menu = item.parentElement.querySelector('.sidebar-dropdown-menu');
+    if (!menu) return;
+    const isOpen = menu.classList.contains('open');
+    menu.classList.toggle('open');
+    item.textContent = (isOpen ? '▶ ' : '▼ ') + item.textContent.replace(/^[▶▼]\s*/, '');
+  });
+});
+
 // --- Architecture Canvas ---
 const canvas = new Canvas('#arch-svg', '#arch-canvas');
 

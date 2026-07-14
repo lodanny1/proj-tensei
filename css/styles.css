@@ -262,6 +262,25 @@ body {
   padding: 8px 8px;
 }
 
+/* Sidebar dropdown */
+.sidebar-dropdown { margin-bottom: 2px; }
+.sidebar-dropdown-menu {
+  display: none;
+  padding-left: 20px;
+}
+.sidebar-dropdown-menu.open { display: block; }
+.sidebar-sub-item {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text-sec);
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.sidebar-sub-item:hover { background: #f2f8fd; color: var(--link); }
+.sidebar-sub-item.active { color: var(--link); font-weight: 600; }
+
 /* === MAIN CONTENT === */
 .main-content {
   flex: 1;

@@ -57,7 +57,13 @@
       Plan <span class="plan-badge">Basic Support</span>
     </div>
     <hr class="sidebar-divider">
-    <a class="sidebar-nav-item active">▶ Your resources</a>
+    <div class="sidebar-dropdown">
+      <a class="sidebar-nav-item active" id="dropdown-your-resources">▼ Your resources</a>
+      <div class="sidebar-dropdown-menu open" id="menu-your-resources">
+        <a class="sidebar-sub-item active" href="#">Support Dashboard</a>
+        <a class="sidebar-sub-item" href="#">Support Cases</a>
+      </div>
+    </div>
     <a class="sidebar-nav-item">▶ AWS Support Plans</a>
     <a class="sidebar-nav-item">▶ Support Tools</a>
     <hr class="sidebar-divider">
@@ -109,6 +115,27 @@
             <button class="zoom-btn" onclick="zoomReset()" style="font-size:11px">⟳</button>
           </div>
 
+          <!-- Legend (fixed position) -->
+          <div class="arch-legend">
+            <div class="arch-legend-title">Legend</div>
+            <div class="arch-legend-item">
+              <svg width="24" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#0972d3" stroke-width="2"/><polygon points="20,2 24,4 20,6" fill="#0972d3"/></svg>
+              <span>Data flow</span>
+            </div>
+            <div class="arch-legend-item">
+              <svg width="24" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#687078" stroke-width="1.5" stroke-dasharray="3 2"/><polygon points="20,2 24,4 20,6" fill="#687078"/></svg>
+              <span>Admin / infra</span>
+            </div>
+            <div class="arch-legend-item">
+              <svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="#0972d3" stroke-width="2"/></svg>
+              <span>↔ Bidirectional</span>
+            </div>
+            <div class="arch-legend-item">
+              <svg width="24" height="8"><line x1="0" y1="4" x2="20" y2="4" stroke="#687078" stroke-width="1.5"/><polygon points="20,2 24,4 20,6" fill="#687078"/></svg>
+              <span>→ Unidirectional</span>
+            </div>
+          </div>
+
           <!-- Tooltip -->
           <div class="arch-tooltip" id="arch-tooltip"></div>
         </div>
@@ -133,6 +160,7 @@
   </div>
 </footer>
 
+<script src="js/lib/dagre.min.js"></script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

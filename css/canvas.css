@@ -1,0 +1,128 @@
+/* === ARCHITECTURE CANVAS === */
+.arch-container {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #d5dbdb;
+  position: relative;
+}
+
+.arch-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #fafafa;
+  border-bottom: 1px solid #eaeded;
+}
+.arch-toolbar label {
+  font-size: 12px;
+  color: #687078;
+  font-weight: 600;
+}
+.arch-toolbar select {
+  padding: 4px 10px;
+  border: 1px solid #d5dbdb;
+  border-radius: 6px;
+  background: #fff;
+  color: #16191f;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+}
+.arch-toolbar select:focus { border-color: #0972d3; }
+.arch-toolbar .live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #687078;
+  margin-left: auto;
+}
+.arch-toolbar .live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #037f0c;
+  animation: pulse 2s infinite;
+}
+
+.arch-canvas {
+  cursor: grab;
+  min-height: 580px;
+  background: #fff;
+}
+.arch-canvas:active { cursor: grabbing; }
+.arch-canvas svg {
+  width: 100%;
+  height: 580px;
+  display: block;
+}
+
+/* Zoom controls */
+.zoom-controls {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 50;
+}
+.zoom-btn {
+  width: 32px;
+  height: 32px;
+  background: #fff;
+  border: 1px solid #d5dbdb;
+  border-radius: 6px;
+  color: #16191f;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.zoom-btn:hover { background: #f2f3f3; }
+.zoom-level {
+  font-size: 10px;
+  color: #687078;
+  text-align: center;
+  padding: 2px 0;
+}
+
+/* SVG elements */
+.vpc-boundary { fill: none; stroke-width: 2; stroke-dasharray: 8 4; }
+.subnet { stroke-width: 1.5; rx: 8; }
+.subnet.public { fill: rgba(78, 205, 196, 0.06); stroke: #2a9d8f; }
+.subnet.private { fill: rgba(255, 107, 53, 0.05); stroke: #c45a2d; }
+.resource-node { cursor: pointer; }
+.resource-node:hover rect { filter: brightness(0.95); stroke-width: 2.5; }
+.connection { stroke: #687078; stroke-width: 1.5; fill: none; }
+.connection.active { stroke: #0972d3; }
+.connection-label { font-size: 9px; fill: #687078; font-family: monospace; }
+.region-label { font-size: 12px; fill: #687078; font-family: monospace; }
+.resource-label { font-size: 10px; fill: #414750; text-anchor: middle; }
+.subnet-label { font-size: 11px; fill: #687078; font-weight: 600; }
+.vpc-label { font-size: 13px; font-weight: 700; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* Tooltip */
+.arch-tooltip {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #0972d3;
+  border-radius: 8px;
+  padding: 12px 16px;
+  max-width: 300px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.arch-tooltip.visible { opacity: 1; }
+.arch-tooltip h4 { color: #0972d3; margin-bottom: 4px; font-size: 13px; }
+.arch-tooltip .tooltip-type { color: #687078; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.arch-tooltip .tooltip-detail { color: #414750; font-size: 12px; line-height: 1.6; }

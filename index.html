@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support Center</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/canvas.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    <span style="color:#fff;font-size:20px;font-weight:700;">A</span>
+  </div>
+  <div class="topnav-console-btn">
+    <svg width="16" height="16" fill="none"><circle cx="8" cy="8" r="7" stroke="#539fe5" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#539fe5" stroke-width="1.5"/></svg>
+  </div>
+  <span class="topnav-grid">⠿</span>
+  <div class="topnav-search">
+    <span class="topnav-search-icon">🔍</span>
+    <input type="text" placeholder="Search                                                    [Option+S]">
+  </div>
+  <button class="topnav-q-btn">✦ Ask Amazon Q</button>
+  <div class="topnav-icons">
+    <span class="topnav-icon">📄</span>
+    <span class="topnav-icon">🔔</span>
+    <span class="topnav-icon">❓</span>
+    <span class="topnav-icon">⚙️</span>
+  </div>
+  <span class="topnav-region">Global ▾</span>
+  <span class="topnav-account">Account ▾<br><span style="font-size:11px;color:#8c8c94">Admin/user</span></span>
+</nav>
+
+<!-- Secondary bar -->
+<div class="topbar-secondary">
+  <div class="topbar-secondary-left">
+    <button class="hamburger-btn" id="toggleSidebar">☰</button>
+  </div>
+  <div class="topbar-secondary-right">
+    <span style="cursor:pointer">ⓘ</span>
+    <span style="cursor:pointer">⇌</span>
+  </div>
+</div>
+
+<!-- PAGE LAYOUT -->
+<div class="page-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Support Center</span>
+      <button class="sidebar-collapse-btn" id="collapseBtn">‹</button>
+    </div>
+    <div class="sidebar-plan">
+      Plan <span class="plan-badge">Basic Support</span>
+    </div>
+    <hr class="sidebar-divider">
+    <a class="sidebar-nav-item active">▶ Your resources</a>
+    <a class="sidebar-nav-item">▶ AWS Support Plans</a>
+    <a class="sidebar-nav-item">▶ Support Tools</a>
+    <hr class="sidebar-divider">
+    <a class="sidebar-nav-item">▶ AWS Knowledge resources</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="content-wrapper">
+
+      <!-- Architecture Container -->
+      <div class="arch-container">
+        <!-- Toolbar: Region filter -->
+        <div class="arch-toolbar">
+          <label>Region:</label>
+          <select id="region-select">
+            <option value="global" selected>🌐 Global (All Regions)</option>
+            <option value="us-east-1">US East (N. Virginia)</option>
+            <option value="us-west-1">US West (N. California)</option>
+            <option value="us-west-2">US West (Oregon)</option>
+            <option value="eu-west-1">EU (Ireland)</option>
+            <option value="ap-southeast-1">Asia Pacific (Singapore)</option>
+            <option value="ap-northeast-1">Asia Pacific (Tokyo)</option>
+          </select>
+          <label>AZ:</label>
+          <select id="az-select">
+            <option value="all" selected>All AZs</option>
+            <option value="us-east-1a">us-east-1a</option>
+            <option value="us-east-1b">us-east-1b</option>
+            <option value="us-east-1c">us-east-1c</option>
+            <option value="us-west-1a">us-west-1a</option>
+            <option value="us-west-1b">us-west-1b</option>
+          </select>
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span id="region-label">All Regions</span>
+          </div>
+        </div>
+
+        <!-- Canvas -->
+        <div class="arch-canvas" id="arch-canvas">
+          <svg id="arch-svg" viewBox="0 0 1800 1400" xmlns="http://www.w3.org/2000/svg"></svg>
+
+          <!-- Zoom Controls -->
+          <div class="zoom-controls">
+            <button class="zoom-btn" onclick="zoomIn()">+</button>
+            <div class="zoom-level" id="zoom-level">100%</div>
+            <button class="zoom-btn" onclick="zoomOut()">−</button>
+            <button class="zoom-btn" onclick="zoomReset()" style="font-size:11px">⟳</button>
+          </div>
+
+          <!-- Tooltip -->
+          <div class="arch-tooltip" id="arch-tooltip"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+  <div class="footer-left">
+    <span class="cloudshell">☁ CloudShell</span>
+    <a href="#">Feedback</a>
+  </div>
+  <div>
+    © 2026, Amazon Web Services, Inc. or its affiliates.
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Cookie preferences</a>
+  </div>
+</footer>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

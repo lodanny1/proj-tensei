@@ -20,6 +20,7 @@ export class Renderer {
     svg += this._renderVpcBoxes();
     svg += this._renderEdges();
     svg += this._renderNodes();
+    svg += this._renderLegend();
     this.canvas.svg.innerHTML = svg;
     this.canvas.fitToContent(this.positions);
   }
@@ -41,14 +42,11 @@ export class Renderer {
     regions.forEach(region => {
       const rPositions = this.nodes.filter(n => n.region === region).map(n => this.positions[n.id]).filter(Boolean);
       if (rPositions.length === 0) return;
-      const { minX, minY, maxX, maxY } = this._bounds(rPositions, 100);
+      const { minX, minY, maxX, maxY } = this._bounds(rPositions, 90);
       const count = this.nodes.filter(n => n.region === region).length;
       const w = maxX - minX;
-      const labelWidth = region.length * 9 + 100;
-      const labelX = minX + (w - labelWidth) / 2;
       out += `<rect x="${minX}" y="${minY}" width="${w}" height="${maxY - minY}" rx="16" fill="none" stroke="#232f3e" stroke-width="2" data-region="${region}"/>`;
-      out += `<rect x="${labelX}" y="${minY - 10}" width="${labelWidth}" height="20" rx="4" fill="#fff" data-region="${region}"/>`;
-      out += `<text x="${minX + w / 2}" y="${minY + 4}" font-size="12" font-weight="700" fill="#232f3e" text-anchor="middle" data-region="${region}">⬡ ${region} — ${count} resources</text>`;
+      out += `<text x="${minX + 14}" y="${minY + 18}" font-size="11" font-weight="700" fill="#232f3e" data-region="${region}">⬡ ${region} — ${count} resources</text>`;
     });
     return out;
   }
@@ -60,34 +58,36 @@ export class Renderer {
       const vpcNodes = this.nodes.filter(n => n.vpc === vpc);
       const vPositions = vpcNodes.map(n => this.positions[n.id]).filter(Boolean);
       if (vPositions.length === 0) return;
-      const { minX, minY, maxX, maxY } = this._bounds(vPositions, 60);
       const region = vpcNodes[0].region;
       const color = this.vpcColors[vpc] || '#687078';
       const label = this.vpcLabels[vpc] || vpc;
-      const w = maxX - minX;
-      const vLabelWidth = label.length * 7 + 10;
-      const vLabelX = minX + (w - vLabelWidth) / 2;
 
-      out += `<rect x="${minX}" y="${minY}" width="${w}" height="${maxY - minY}" rx="12" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="8 4" data-region="${region}"/>`;
-      out += `<rect x="${vLabelX}" y="${minY - 9}" width="${vLabelWidth}" height="18" rx="3" fill="#fff" data-region="${region}"/>`;
-      out += `<text x="${minX + w / 2}" y="${minY + 4}" font-size="11" font-weight="700" fill="${color}" text-anchor="middle" data-region="${region}">${label}</text>`;
+      // VPC bounds
+      const vb = this._bounds(vPositions, 45);
+      const vw = vb.maxX - vb.minX;
+      const vh = vb.maxY - vb.minY;
 
-      // Subnet boxes
+      out += `<rect x="${vb.minX}" y="${vb.minY}" width="${vw}" height="${vh}" rx="12" fill="none" stroke="${color}" stroke-width="2" stroke-dasharray="8 4" data-region="${region}"/>`;
+      out += `<text x="${vb.minX + 12}" y="${vb.minY + 18}" font-size="11" font-weight="700" fill="${color}" data-region="${region}">${label}</text>`;
+
+      // Subnet shading — only draw if nodes don't overlap between tiers
       ['public', 'private'].forEach(tier => {
         const sNodes = vpcNodes.filter(n => n.tier === tier);
         const sPositions = sNodes.map(n => this.positions[n.id]).filter(Boolean);
         if (sPositions.length === 0) return;
-        const sb = this._bounds(sPositions, 45);
+        const sb = this._bounds(sPositions, 15);
+        // Clamp subnet inside VPC with margin from VPC label
+        sb.minY = Math.max(sb.minY, vb.minY + 28);
         const sColor = tier === 'public' ? '#2a9d8f' : '#c45a2d';
-        const sFill = tier === 'public' ? 'rgba(42,157,143,0.04)' : 'rgba(196,90,45,0.04)';
+        const sFill = tier === 'public' ? 'rgba(78,205,196,0.06)' : 'rgba(255,107,53,0.05)';
         const sLabel = tier === 'public' ? 'Public Subnet' : 'Private Subnet';
         const sw = sb.maxX - sb.minX;
-        const sLabelWidth = sLabel.length * 7 + 8;
-        const sLabelX = sb.minX + (sw - sLabelWidth) / 2;
+        const sh = sb.maxY - sb.minY;
 
-        out += `<rect x="${sb.minX}" y="${sb.minY}" width="${sw}" height="${sb.maxY - sb.minY}" rx="8" fill="${sFill}" stroke="${sColor}" stroke-width="1.5" data-region="${region}"/>`;
-        out += `<rect x="${sLabelX}" y="${sb.minY - 8}" width="${sLabelWidth}" height="16" rx="3" fill="#fff" data-region="${region}"/>`;
-        out += `<text x="${sb.minX + sw / 2}" y="${sb.minY + 4}" font-size="10" font-weight="600" fill="${sColor}" text-anchor="middle" data-region="${region}">${sLabel}</text>`;
+        if (sh > 20) { // Only draw if there's meaningful height
+          out += `<rect x="${sb.minX}" y="${sb.minY}" width="${sw}" height="${sh}" rx="6" fill="${sFill}" stroke="${sColor}" stroke-width="1" data-region="${region}"/>`;
+          out += `<text x="${sb.minX + 8}" y="${sb.minY + 13}" font-size="9" font-weight="600" fill="${sColor}" data-region="${region}">${sLabel}</text>`;
+        }
       });
     });
     return out;
@@ -104,11 +104,6 @@ export class Renderer {
       const marker = dashed ? 'url(#arrow-dashed)' : 'url(#arrow)';
       const dashAttr = dashed ? ' stroke-dasharray="5 3"' : '';
       out += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${stroke}" stroke-width="1.5"${dashAttr} marker-end="${marker}" data-from="${edge.from}" data-to="${edge.to}"/>`;
-      if (edge.label) {
-        const mx = (from.x + to.x) / 2;
-        const my = (from.y + to.y) / 2 - 6;
-        out += `<text x="${mx}" y="${my}" font-size="9" fill="#687078" font-family="monospace" text-anchor="middle" data-from="${edge.from}" data-to="${edge.to}">${edge.label}</text>`;
-      }
     });
     return out;
   }
@@ -143,12 +138,32 @@ export class Renderer {
     return out;
   }
 
-  _bounds(positions, padding) {
-    return {
-      minX: Math.min(...positions.map(p => p.x)) - padding,
-      minY: Math.min(...positions.map(p => p.y)) - padding,
-      maxX: Math.max(...positions.map(p => p.x)) + padding + 40,
-      maxY: Math.max(...positions.map(p => p.y)) + padding + 40
-    };
+  _renderLegend() {
+    // Legend is now rendered as a fixed HTML overlay in index.html
+    return '';
+  }
+
+  _bounds(positions, padding, forceSquare = false) {
+    // Account for node size (64x52) + label below (~30px) + sublabel (~15px)
+    const nodeHalfW = 50;   // half width including label text
+    const nodeHalfH = 60;   // half height including labels below
+    let minX = Math.min(...positions.map(p => p.x)) - nodeHalfW - padding;
+    let minY = Math.min(...positions.map(p => p.y)) - nodeHalfH - padding;
+    let maxX = Math.max(...positions.map(p => p.x)) + nodeHalfW + padding;
+    let maxY = Math.max(...positions.map(p => p.y)) + nodeHalfH + padding;
+
+    if (forceSquare) {
+      const w = maxX - minX;
+      const h = maxY - minY;
+      const size = Math.max(w, h);
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+      minX = cx - size / 2;
+      maxX = cx + size / 2;
+      minY = cy - size / 2;
+      maxY = cy + size / 2;
+    }
+
+    return { minX, minY, maxX, maxY };
   }
 }

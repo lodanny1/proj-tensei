@@ -27,11 +27,24 @@ export class FilterController {
     const az = this.az;
 
     // 1. Determine visible nodes
+    // Global services always visible
     const visibleNodes = new Set();
     document.querySelectorAll('.resource-node').forEach(node => {
       let show = true;
-      if (region !== 'global' && node.dataset.region && node.dataset.region !== region) show = false;
-      if (show && az !== 'all' && node.dataset.az && node.dataset.az !== az) show = false;
+      const nodeRegion = node.dataset.region;
+
+      // Global services always show
+      if (nodeRegion === 'global') {
+        show = true;
+      } else if (region !== 'global' && nodeRegion !== region) {
+        show = false;
+      }
+
+      // AZ filter
+      if (show && az !== 'all' && node.dataset.az && node.dataset.az !== az) {
+        show = false;
+      }
+
       node.style.display = show ? '' : 'none';
       if (show) visibleNodes.add(node.id);
     });
@@ -39,15 +52,20 @@ export class FilterController {
     // 2. Structural elements
     document.querySelectorAll('[data-region]:not(.resource-node):not([data-from])').forEach(el => {
       let show = true;
-      if (region !== 'global') {
-        if (el.dataset.region === 'cross-region') show = false;
-        else if (el.dataset.region !== region) show = false;
+      const elRegion = el.dataset.region;
+
+      if (elRegion === 'global') {
+        show = true;
+      } else if (region !== 'global') {
+        if (elRegion === 'cross-region') show = false;
+        else if (elRegion !== region) show = false;
       }
+
       if (show && az !== 'all' && el.dataset.az && el.dataset.az !== az) show = false;
       el.style.display = show ? '' : 'none';
     });
 
-    // 3. Connections: visible only if both endpoints visible
+    // 3. Connections: visible if both endpoints visible
     document.querySelectorAll('[data-from]').forEach(el => {
       const show = visibleNodes.has(el.dataset.from) && visibleNodes.has(el.dataset.to);
       el.style.display = show ? '' : 'none';

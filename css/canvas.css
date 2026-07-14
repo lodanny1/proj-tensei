@@ -98,8 +98,9 @@
 .subnet.private { fill: rgba(255, 107, 53, 0.05); stroke: #c45a2d; }
 .resource-node { cursor: pointer; }
 .resource-node:hover rect { filter: brightness(0.95); stroke-width: 2.5; }
-.connection { stroke: #687078; stroke-width: 1.5; fill: none; }
+.connection { stroke: #687078; stroke-width: 1.5; fill: none; pointer-events: stroke; }
 .connection.active { stroke: #0972d3; }
+.connection:hover { stroke-width: 3; opacity: 0.8; }
 .connection-label { font-size: 9px; fill: #687078; font-family: monospace; }
 .region-label { font-size: 12px; fill: #687078; font-family: monospace; }
 .resource-label { font-size: 10px; fill: #414750; text-anchor: middle; }
@@ -107,6 +108,42 @@
 .vpc-label { font-size: 13px; font-weight: 700; }
 
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* Legend */
+.arch-legend {
+  position: absolute;
+  top: 50px;
+  right: 8px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid #d5dbdb;
+  border-radius: 6px;
+  padding: 8px 10px;
+  z-index: 50;
+  width: auto;
+  height: auto;
+  display: inline-block;
+}
+.arch-legend-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: #16191f;
+  margin-bottom: 6px;
+}
+.arch-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  height: 12px;
+}
+.arch-legend-item:last-child { margin-bottom: 0; }
+.arch-legend-item svg { flex-shrink: 0; width: 24px; height: 8px; }
+.arch-legend-item span {
+  font-size: 9px;
+  color: #414750;
+  white-space: nowrap;
+  line-height: 1;
+}
 
 /* Tooltip */
 .arch-tooltip {
